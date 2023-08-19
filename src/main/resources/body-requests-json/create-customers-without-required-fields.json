@@ -1,0 +1,13 @@
+{
+  "id": 0,
+  "email": null,
+  "dateOfBirth": "2023-08-02",
+  "loyalty": {
+    "bonusCardNumber": null,
+    "status": null,
+    "discountRate": 0
+  },
+  "shopCode": null,
+  "updatedAt": "2023-08-02T19:13:07.600Z",
+  "createdAt": "2023-08-02T19:13:07.600Z"
+}

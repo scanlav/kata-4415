@@ -1,0 +1,16 @@
+{
+  "id": 0,
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "phoneNumber": "+79622348968",
+  "email": "string@mail.com",
+  "dateOfBirth": "2023-08-06",
+  "loyalty": {
+    "bonusCardNumber": "string",
+    "status": "string",
+    "discountRate": 0
+  },
+  "shopCode": "string",
+  "updatedAt": "2023-08-06T20:04:09.506Z",
+  "createdAt": "2023-08-06T20:04:09.506Z"
+}
