@@ -1,4 +1,4 @@
-package com.kata.config.matchers;
+package com.kata.config.serviceCustomers.specifications.matchers;
 
 import org.hamcrest.Matcher;
 

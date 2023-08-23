@@ -1,20 +1,20 @@
-package com.kata.config.specifications;
+package com.kata.config.serviceCustomers.specifications;
 
-import com.kata.config.Constants;
-import com.kata.config.DataProvider;
+import com.kata.config.serviceCustomers.specifications.constants.ConstantsService;
+import com.kata.config.serviceCustomers.specifications.processingJson.DataProvider;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-import static com.kata.config.ServiceValues.randomNumber;
+import static com.kata.config.serviceCustomers.specifications.preparationDataCustomers.ServiceValues.randomNumber;
 
-public class RequestSpecificationsApi {
+public class Specifications {
 
     public static RequestSpecBuilder specBuilder() {
         return new RequestSpecBuilder()
-                .setBaseUri(Constants.BASE_PATH_API)
+                .setBaseUri(ConstantsService.BASE_PATH_API)
                 .setContentType(ContentType.JSON)
                 .addFilter(new RequestLoggingFilter())
                 .addFilter(new ResponseLoggingFilter());
@@ -22,33 +22,34 @@ public class RequestSpecificationsApi {
 
     public static RequestSpecification reqSpecGetAllCustomers() {
         return specBuilder()
-                .setBasePath(Constants.CUSTOMERS)
+                .setBasePath(ConstantsService.CUSTOMERS)
                 .build();
     }
 
     public static <T> RequestSpecification reqSpecGetCustomersId(T id) {
         return specBuilder()
-                .setBasePath(Constants.CUSTOMERS_ID + id)
+                .setBasePath(ConstantsService.CUSTOMERS_ID + id)
                 .build();
     }
 
     public static <T> RequestSpecification reqSpecGetCustomersByPhoneNumber(T phoneNumber) {
         return specBuilder()
-                .setBasePath(Constants.PATH_GET_CUSTOMER_BY_PHONE_NUMBER)
+                .setBasePath(ConstantsService.PATH_GET_CUSTOMER_BY_PHONE_NUMBER)
                 .addQueryParam("phoneNumber", phoneNumber)
                 .build();
     }
 
-    public static RequestSpecification reqSpecPutCustomers(Integer id, String body) {
+    public static <T> RequestSpecification reqSpecPutCustomers(T id, String body) {
         return specBuilder()
-                .setBasePath(Constants.CUSTOMERS + "/" + id)
-                .setBody(DataProvider.readJsonAsString(body))
+                .setBasePath(ConstantsService.CUSTOMERS_ID + id)
+                .setBody(DataProvider.readJsonAsString(body)
+                        .replace("{phoneNumber}", randomNumber()))
                 .build();
     }
 
     public static <T> RequestSpecification reqSpecDeleteCustomers(T id) {
         return specBuilder()
-                .setBasePath(Constants.CUSTOMERS_ID + id)
+                .setBasePath(ConstantsService.CUSTOMERS_ID + id)
                 .build();
     }
 
@@ -56,7 +57,7 @@ public class RequestSpecificationsApi {
         return specBuilder()
                 .setBody(DataProvider.readJsonAsString(body)
                         .replace("{phoneNumber}", randomNumber()))
-                .setBasePath(Constants.CUSTOMERS)
+                .setBasePath(ConstantsService.CUSTOMERS)
                 .build();
     }
 }

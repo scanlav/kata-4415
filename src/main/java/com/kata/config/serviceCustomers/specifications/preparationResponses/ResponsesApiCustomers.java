@@ -1,6 +1,6 @@
-package com.kata.config;
+package com.kata.config.serviceCustomers.specifications.preparationResponses;
 
-import com.kata.config.specifications.RequestSpecificationsApi;
+import com.kata.config.serviceCustomers.specifications.Specifications;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
@@ -8,32 +8,32 @@ import static io.restassured.RestAssured.given;
 public class ResponsesApiCustomers {
 
     public static ValidatableResponse responseGetAllCustomers() {
-        return given().spec(RequestSpecificationsApi.reqSpecGetAllCustomers())
+        return given().spec(Specifications.reqSpecGetAllCustomers())
                 .get().then();
     }
 
     public static <T> ValidatableResponse responseGetCustomersId(T id) {
-        return given().spec(RequestSpecificationsApi.reqSpecGetCustomersId(id))
+        return given().spec(Specifications.reqSpecGetCustomersId(id))
                 .get().then();
     }
 
     public static <T> ValidatableResponse responseGetCustomerByPhoneNumber(T phoneNumber) {
-        return given().spec(RequestSpecificationsApi.reqSpecGetCustomersByPhoneNumber(phoneNumber))
+        return given().spec(Specifications.reqSpecGetCustomersByPhoneNumber(phoneNumber))
                 .get().then();
     }
 
-    public static ValidatableResponse responsePutCustomers(Integer id, String body) {
-        return given().spec(RequestSpecificationsApi.reqSpecPutCustomers(id, body))
+    public static <T> ValidatableResponse responsePutCustomers(T id, String body) {
+        return given().spec(Specifications.reqSpecPutCustomers(id, body))
                 .put().then();
     }
 
     public static <T> ValidatableResponse responseDeleteCustomers(T id) {
-        return given().spec(RequestSpecificationsApi.reqSpecDeleteCustomers(id))
+        return given().spec(Specifications.reqSpecDeleteCustomers(id))
                 .delete().then();
     }
 
     public static ValidatableResponse responsePostCustomers(String body) {
-        return given().spec(RequestSpecificationsApi.reqSpecPostCustomers(body))
+        return given().spec(Specifications.reqSpecPostCustomers(body))
                 .post().then();
     }
 }

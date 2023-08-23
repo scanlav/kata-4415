@@ -1,8 +1,7 @@
-package com.kata.config;
+package com.kata.config.serviceCustomers.specifications.processingJson;
 
 import java.io.IOException;
 import java.nio.file.Files;
-
 import java.nio.file.Paths;
 
 public class DataProvider {

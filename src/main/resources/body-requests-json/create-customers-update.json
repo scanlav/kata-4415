@@ -1,5 +1,5 @@
 {
   "firstName": "Иван",
   "lastName": "Petrov",
-  "phoneNumber": "+79999999999"
+  "phoneNumber": "{phoneNumber}"
 }
