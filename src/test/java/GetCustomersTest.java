@@ -5,12 +5,10 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.kata.config.serviceCustomers.specifications.checks.CheckAnswers.*;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsJson.ID;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsJson.PHONE_NUMBER;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsService.*;
-import static com.kata.config.serviceCustomers.specifications.preparationDataCustomers.ServiceValues.getField;
-import static com.kata.config.serviceCustomers.specifications.preparationResponses.ResponsesApiCustomers.*;
+import static com.kata.config.serviceCustomers.checks.CheckAnswers.*;
+import static com.kata.config.serviceCustomers.constants.ConstantsService.*;
+import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.*;
+import static com.kata.config.serviceCustomers.preparationResponses.ResponsesApiCustomers.*;
 
 @Epic(CUSTOMERS)
 @Story("Получение клиентов методом GET")
@@ -31,8 +29,9 @@ public class GetCustomersTest {
             "этого же клиента с помощью метода. ")
     public void testGetCustomersId() {
         ValidatableResponse customer = responsePostCustomers("create-customers");
-        String id = getField(customer, ID);
-        String phoneNumber = getField(responseGetCustomersId(id), PHONE_NUMBER);
+        String id = getId(customer);
+        ValidatableResponse response = responseGetCustomersId(id);
+        String phoneNumber = getPhoneNumber(response);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Petr", "Petrov", phoneNumber);
     }
@@ -74,7 +73,7 @@ public class GetCustomersTest {
             "404")
     public void testGetUnknownCustomers() {
         ValidatableResponse customer = responsePostCustomers("create-customers");
-        String id = getField(customer, ID);
+        String id = getId(customer);
         responseDeleteCustomers(id);
         ValidatableResponse response = responseGetCustomersId(id);
 

@@ -1,14 +1,14 @@
 package com.kata.config.serviceCustomers.specifications;
 
-import com.kata.config.serviceCustomers.specifications.constants.ConstantsService;
-import com.kata.config.serviceCustomers.specifications.processingJson.DataProvider;
+import com.kata.config.serviceCustomers.constants.ConstantsService;
+import com.kata.config.serviceCustomers.processingJson.DataProvider;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-import static com.kata.config.serviceCustomers.specifications.preparationDataCustomers.ServiceValues.randomNumber;
+import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.randomNumber;
 
 public class Specifications {
 

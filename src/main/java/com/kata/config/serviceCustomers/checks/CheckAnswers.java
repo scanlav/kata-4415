@@ -1,36 +1,33 @@
-package com.kata.config.serviceCustomers.specifications.checks;
+package com.kata.config.serviceCustomers.checks;
 
-import com.kata.config.serviceCustomers.specifications.matchers.DateMatchers;
+import com.kata.config.serviceCustomers.matchers.DateMatchers;
 import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
 
 public class CheckAnswers {
 
-    public static void checkAllFieldsCorrectCreatedCustomer(ValidatableResponse response, String firstName,
-                                                                           String lastName, String phoneNumber, String email,
-                                                                           String dateOfBirth  ) {
+    public static void checkRequiredFieldsCorrectCreatedCustomers(ValidatableResponse response,
+                                                                  String firstName, String lastName,
+                                                                  String phoneNumber) {
         response
                 .body("id", Matchers.notNullValue())
                 .body("firstName", Matchers.equalTo(firstName))
                 .body("lastName", Matchers.equalTo(lastName))
                 .body("phoneNumber", Matchers.equalTo(phoneNumber))
-                .body("email", Matchers.equalTo(email))
-                .body("dateOfBirth", Matchers.equalTo(dateOfBirth))
-                .body("loyalty.bonusCardNumber", Matchers.notNullValue())
-                .body("loyalty.status", Matchers.notNullValue())
-                .body("loyalty.discountRate", Matchers.notNullValue())
                 .body("updatedAt", DateMatchers.isToday())
                 .body("createdAt", DateMatchers.isToday());
     }
 
-    public static void checkRequiredFieldsCorrectCreatedCustomers(ValidatableResponse response,
-                                                                String firstName, String lastName,
-                                           String phoneNumber) {
+    public static void checkAllFieldsCorrectCreatedCustomer(ValidatableResponse response, String firstName,
+                                                            String lastName, String phoneNumber, String email,
+                                                            String dateOfBirth) {
+        checkRequiredFieldsCorrectCreatedCustomers(response, firstName, lastName, phoneNumber);
         response
-                .body("id", Matchers.notNullValue())
-                .body("firstName", Matchers.equalTo(firstName))
-                .body("lastName", Matchers.equalTo(lastName))
-                .body("phoneNumber", Matchers.equalTo(phoneNumber));
+                .body("email", Matchers.equalTo(email))
+                .body("dateOfBirth", Matchers.equalTo(dateOfBirth))
+                .body("loyalty.bonusCardNumber", Matchers.notNullValue())
+                .body("loyalty.status", Matchers.notNullValue())
+                .body("loyalty.discountRate", Matchers.notNullValue());
     }
 
     public static void checkFieldCustomer(ValidatableResponse response, String field, String value) {
@@ -54,7 +51,7 @@ public class CheckAnswers {
     }
 
     public static void checkErrorMessage(ValidatableResponse response, String[] errors) {
-        for (String error: errors) {
+        for (String error : errors) {
             response
                     .body("errors", Matchers.hasItem(error));
         }

@@ -5,12 +5,11 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.kata.config.serviceCustomers.specifications.checks.CheckAnswers.*;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsJson.PHONE_NUMBER;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsService.*;
-import static com.kata.config.serviceCustomers.specifications.preparationDataCustomers.ServiceValues.getField;
-import static com.kata.config.serviceCustomers.specifications.preparationResponses.ResponsesApiCustomers.responseGetCustomerByPhoneNumber;
-import static com.kata.config.serviceCustomers.specifications.preparationResponses.ResponsesApiCustomers.responsePostCustomers;
+import static com.kata.config.serviceCustomers.checks.CheckAnswers.*;
+import static com.kata.config.serviceCustomers.constants.ConstantsService.*;
+import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.getPhoneNumber;
+import static com.kata.config.serviceCustomers.preparationResponses.ResponsesApiCustomers.responseGetCustomerByPhoneNumber;
+import static com.kata.config.serviceCustomers.preparationResponses.ResponsesApiCustomers.responsePostCustomers;
 
 @Epic(CUSTOMERS + "/filter")
 @Story("Получение клиента по номеру телефона методом GET")
@@ -22,10 +21,11 @@ public class GetCustomersFilterTest {
             "полей при получении клиента с помощью метода.")
     public void testGetCustomersByPhoneNumber() {
         ValidatableResponse customer = responsePostCustomers("create-customers");
-        String phoneNumber = getField(customer, PHONE_NUMBER);
+        String phoneNumber = getPhoneNumber(customer);
+        ValidatableResponse response = responseGetCustomerByPhoneNumber(phoneNumber);
 
         checkRequiredFieldsCorrectCreatedCustomers(
-                responseGetCustomerByPhoneNumber(phoneNumber),
+                response,
                 "Petr",
                 "Petrov",
                 phoneNumber
@@ -38,7 +38,8 @@ public class GetCustomersFilterTest {
             " на длину не установлено, что некорректно. Но в документации длина не указана, за ошибку " +
             "считать нельзя.")
     public void testGetCustomersByPhoneNumberConcat() {
-        String phoneNumber = getField(responsePostCustomers("create-customers"), PHONE_NUMBER);
+        ValidatableResponse customer = responsePostCustomers("create-customers");
+        String phoneNumber = getPhoneNumber(customer);
         ValidatableResponse response = responseGetCustomerByPhoneNumber(phoneNumber);
 
         checkErrorMessage(response, NOT_FOUND);

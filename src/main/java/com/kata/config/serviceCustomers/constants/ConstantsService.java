@@ -1,6 +1,6 @@
-package com.kata.config.serviceCustomers.specifications.constants;
+package com.kata.config.serviceCustomers.constants;
 
-import static com.kata.config.serviceCustomers.specifications.connection.TestConfigProperties.getValue;
+import static com.kata.config.serviceCustomers.connection.TestConfigProperties.getValue;
 
 public class ConstantsService {
 

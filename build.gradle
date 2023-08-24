@@ -14,6 +14,7 @@ dependencies {
     testImplementation 'commons-codec:commons-codec:1.16.0'
     testImplementation 'io.rest-assured:rest-assured:5.3.1'
     testImplementation 'io.qameta.allure:allure-java-commons:2.23.0'
+
     implementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     implementation 'commons-codec:commons-codec:1.16.0'
     implementation 'io.rest-assured:rest-assured:5.3.1'

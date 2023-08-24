@@ -1,4 +1,4 @@
-package com.kata.config.serviceCustomers.specifications.preparationResponses;
+package com.kata.config.serviceCustomers.preparationResponses;
 
 import com.kata.config.serviceCustomers.specifications.Specifications;
 import io.restassured.response.ValidatableResponse;

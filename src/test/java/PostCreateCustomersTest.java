@@ -5,11 +5,10 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.kata.config.serviceCustomers.specifications.checks.CheckAnswers.*;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsJson.PHONE_NUMBER;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsService.*;
-import static com.kata.config.serviceCustomers.specifications.preparationDataCustomers.ServiceValues.getField;
-import static com.kata.config.serviceCustomers.specifications.preparationResponses.ResponsesApiCustomers.responsePostCustomers;
+import static com.kata.config.serviceCustomers.checks.CheckAnswers.*;
+import static com.kata.config.serviceCustomers.constants.ConstantsService.*;
+import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.getPhoneNumber;
+import static com.kata.config.serviceCustomers.preparationResponses.ResponsesApiCustomers.responsePostCustomers;
 
 @Epic(CUSTOMERS)
 @Story("Создание клиента методом POST")
@@ -21,7 +20,7 @@ public class PostCreateCustomersTest {
             "полей в ответе.")
     public void testCreateNewCustomersRequiredFields() {
         ValidatableResponse customer = responsePostCustomers("create-customers");
-        String phoneNumber = getField(customer, PHONE_NUMBER);
+        String phoneNumber = getPhoneNumber(customer);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Petr", "Petrov", phoneNumber);
     }
@@ -32,7 +31,7 @@ public class PostCreateCustomersTest {
             "ответе")
     public void testCreatedCustomersCyrillicFirstLastName() {
         ValidatableResponse customer = responsePostCustomers("create-customers-cyrillic");
-        String phoneNumber = getField(customer, PHONE_NUMBER);
+        String phoneNumber = getPhoneNumber(customer);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Петр", "Петров", phoneNumber);
     }
@@ -43,7 +42,7 @@ public class PostCreateCustomersTest {
             "вместо это он отвечает кодом 400")
     public void testCreateNewCustomersAllFields() {
         ValidatableResponse customer = responsePostCustomers("create-customers-all-fields");
-        String phoneNumber = getField(customer, PHONE_NUMBER);
+        String phoneNumber = getPhoneNumber(customer);
 
         checkAllFieldsCorrectCreatedCustomer(
                 customer,
@@ -72,7 +71,7 @@ public class PostCreateCustomersTest {
             "ограничений нет, ожидаем корректное создание клиента.")
     public void testCreateNewCustomersFirstNameNumbers() {
         ValidatableResponse customer = responsePostCustomers("create-customers-firstLastName-numbers");
-        String phoneNumber = getField(customer, PHONE_NUMBER);
+        String phoneNumber = getPhoneNumber(customer);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "123", "123", phoneNumber);
     }

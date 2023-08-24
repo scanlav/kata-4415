@@ -1,4 +1,4 @@
-package com.kata.config.serviceCustomers.specifications.connection;
+package com.kata.config.serviceCustomers.connection;
 
 import java.io.IOException;
 import java.util.Properties;

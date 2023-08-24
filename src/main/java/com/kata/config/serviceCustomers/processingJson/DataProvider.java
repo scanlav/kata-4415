@@ -1,4 +1,4 @@
-package com.kata.config.serviceCustomers.specifications.processingJson;
+package com.kata.config.serviceCustomers.processingJson;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -5,11 +5,10 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.kata.config.serviceCustomers.specifications.checks.CheckAnswers.*;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsJson.*;
-import static com.kata.config.serviceCustomers.specifications.constants.ConstantsService.*;
-import static com.kata.config.serviceCustomers.specifications.preparationDataCustomers.ServiceValues.getField;
-import static com.kata.config.serviceCustomers.specifications.preparationResponses.ResponsesApiCustomers.*;
+import static com.kata.config.serviceCustomers.checks.CheckAnswers.*;
+import static com.kata.config.serviceCustomers.constants.ConstantsService.*;
+import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.*;
+import static com.kata.config.serviceCustomers.preparationResponses.ResponsesApiCustomers.*;
 
 @Epic(CUSTOMERS)
 @Story("Удаление клиента методом GET")
@@ -20,17 +19,15 @@ public class DeleteCustomersTest {
     @Description("Проверка корректного удаления клиента.")
     public void testDeleteCustomers() {
         ValidatableResponse customer = responsePostCustomers("create-customers");
-        String id = getField(customer, ID);
-        String firstName = getField(customer, FIRST_NAME);
-        String lastName = getField(customer, LAST_NAME);
-        String phoneNumber = getField(customer, PHONE_NUMBER);
+        String id = getId(customer);
+        String phoneNumber = getPhoneNumber(customer);
 
-        checkRequiredFieldsCorrectCreatedCustomers(customer, firstName, lastName, phoneNumber);
+        checkRequiredFieldsCorrectCreatedCustomers(customer, "Petr", "Petrov", phoneNumber);
 
         ValidatableResponse responseDeleteCustomers = responseDeleteCustomers(id);
-        ValidatableResponse responseGetCustomers = responseGetCustomersId(id);
-
         checkStatusCode(responseDeleteCustomers, 204);
+
+        ValidatableResponse responseGetCustomers = responseGetCustomersId(id);
         checkStatusCode(responseGetCustomers, 404);
     }
 
