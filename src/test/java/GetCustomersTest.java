@@ -1,7 +1,7 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
-import io.restassured.response.ValidatableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class GetCustomersTest {
     @DisplayName("Получение всех клиентов")
     @Description("Проверяем корректную работу метода получения всех клиентов в базе. Ожидаем 200")
     public void testGetAllCustomers() {
-       ValidatableResponse response = responseGetAllCustomers();
+       Response response = responseGetAllCustomers();
 
        checkStatusCode(response, 200);
     }
@@ -28,19 +28,19 @@ public class GetCustomersTest {
     @Description("Получаем клиента по корректному ID. Сначала создаем клиента, получаем его ID и получаем " +
             "этого же клиента с помощью метода. ")
     public void testGetCustomersId() {
-        ValidatableResponse customer = responsePostCustomers("create-customers");
+        Response customer = responsePostCustomers("create-customers");
         String id = getId(customer);
-        ValidatableResponse response = responseGetCustomersId(id);
-        String phoneNumber = getPhoneNumber(response);
+        String phoneNumber = getPhoneNumber(customer);
+        Response response = responseGetCustomersId(id);
 
-        checkRequiredFieldsCorrectCreatedCustomers(customer, "Petr", "Petrov", phoneNumber);
+        checkRequiredFieldsCorrectCreatedCustomers(response, "Petr", "Petrov", phoneNumber);
     }
 
     @Test
     @DisplayName("Получение клиента с передачей в поле id строки")
     @Description("Пытаемся получить клиента с передачей в поле ID строкового значения. Ожидаем 400")
     public void testGetCustomersString() {
-        ValidatableResponse response = responseGetCustomersId("str");
+        Response response = responseGetCustomersId("str");
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, BAD_REQUEST);
@@ -50,7 +50,7 @@ public class GetCustomersTest {
     @DisplayName("Получение клиента c передачей спецсимвола в поле Id")
     @Description("Пытаемся получить клиента с передачей спецсимвола & в поле ID. Ожидаем 400")
     public void testGetCustomersCharId() {
-        ValidatableResponse response = responseGetCustomersId('&');
+        Response response = responseGetCustomersId('&');
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, BAD_REQUEST);
@@ -61,7 +61,7 @@ public class GetCustomersTest {
     @Description("Согласно документации, тип данных поля id int32. Но по факту сервис принимает и большее " +
             "значение")
     public void testGetCustomersMaxValueExcessId() {
-        ValidatableResponse response = responseGetCustomersId(Integer.MAX_VALUE);
+        Response response = responseGetCustomersId(Integer.MAX_VALUE);
 
         checkErrorMessage(response, BAD_REQUEST);
     }
@@ -72,10 +72,10 @@ public class GetCustomersTest {
             "создаем клиента, получаем его ID, затем удаляем, и пробуем получить с помощью метода. Ожидаем " +
             "404")
     public void testGetUnknownCustomers() {
-        ValidatableResponse customer = responsePostCustomers("create-customers");
+        Response customer = responsePostCustomers("create-customers");
         String id = getId(customer);
         responseDeleteCustomers(id);
-        ValidatableResponse response = responseGetCustomersId(id);
+        Response response = responseGetCustomersId(id);
 
         checkStatusCode(response, 404);
         checkErrorMessage(response, NOT_FOUND);

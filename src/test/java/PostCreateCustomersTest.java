@@ -1,7 +1,7 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
-import io.restassured.response.ValidatableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ public class PostCreateCustomersTest {
     @Description("Создаем клиента только с обязательными для заполнения полями. Проверяем корректность " +
             "полей в ответе.")
     public void testCreateNewCustomersRequiredFields() {
-        ValidatableResponse customer = responsePostCustomers("create-customers");
+        Response customer = responsePostCustomers("create-customers");
         String phoneNumber = getPhoneNumber(customer);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Petr", "Petrov", phoneNumber);
@@ -30,7 +30,7 @@ public class PostCreateCustomersTest {
     @Description("Создание клиента с русскими именем и фамилией. Проверяем корректность заполнения полей в " +
             "ответе")
     public void testCreatedCustomersCyrillicFirstLastName() {
-        ValidatableResponse customer = responsePostCustomers("create-customers-cyrillic");
+        Response customer = responsePostCustomers("create-customers-cyrillic");
         String phoneNumber = getPhoneNumber(customer);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Петр", "Петров", phoneNumber);
@@ -41,7 +41,7 @@ public class PostCreateCustomersTest {
     @Description("Сервис должен игнорировать заполнение полей, которые генерируются на стороне сервиса. Но " +
             "вместо это он отвечает кодом 400")
     public void testCreateNewCustomersAllFields() {
-        ValidatableResponse customer = responsePostCustomers("create-customers-all-fields");
+        Response customer = responsePostCustomers("create-customers-all-fields");
         String phoneNumber = getPhoneNumber(customer);
 
         checkAllFieldsCorrectCreatedCustomer(
@@ -59,7 +59,7 @@ public class PostCreateCustomersTest {
     @Description("Пытаемся создать клиента без заполнения основных полей. Проверяем сообщения ошибок в " +
             "ответе сервиса, ожидаем 400")
     public void testCreateNewCustomersWithoutRequiredFields() {
-        ValidatableResponse response = responsePostCustomers("create-customers-without-required-fields");
+        Response response = responsePostCustomers("create-customers-without-required-fields");
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, MISSING_FIELDS);
@@ -70,7 +70,7 @@ public class PostCreateCustomersTest {
     @Description("Создаем клиента, вместо имени и фамилии передаем числа. Т.к. в документации на это " +
             "ограничений нет, ожидаем корректное создание клиента.")
     public void testCreateNewCustomersFirstNameNumbers() {
-        ValidatableResponse customer = responsePostCustomers("create-customers-firstLastName-numbers");
+        Response customer = responsePostCustomers("create-customers-firstLastName-numbers");
         String phoneNumber = getPhoneNumber(customer);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "123", "123", phoneNumber);
@@ -80,7 +80,7 @@ public class PostCreateCustomersTest {
     @DisplayName("Создание клиента. В дату рождения передаем данные в формате 0000-00-00")
     @Description("Пытаемся создать клиента с нулевой датой рождения. Ожидаем 400")
     public void testCreateNewCustomersBirthdayZero() {
-        ValidatableResponse response = responsePostCustomers("create-customers-birthday-zero");
+        Response response = responsePostCustomers("create-customers-birthday-zero");
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, BAD_REQUEST);

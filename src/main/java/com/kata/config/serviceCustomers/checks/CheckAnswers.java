@@ -1,15 +1,16 @@
 package com.kata.config.serviceCustomers.checks;
 
 import com.kata.config.serviceCustomers.matchers.DateMatchers;
-import io.restassured.response.ValidatableResponse;
+import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 
 public class CheckAnswers {
 
-    public static void checkRequiredFieldsCorrectCreatedCustomers(ValidatableResponse response,
+    public static void checkRequiredFieldsCorrectCreatedCustomers(Response response,
                                                                   String firstName, String lastName,
                                                                   String phoneNumber) {
         response
+                .then()
                 .body("id", Matchers.notNullValue())
                 .body("firstName", Matchers.equalTo(firstName))
                 .body("lastName", Matchers.equalTo(lastName))
@@ -18,11 +19,12 @@ public class CheckAnswers {
                 .body("createdAt", DateMatchers.isToday());
     }
 
-    public static void checkAllFieldsCorrectCreatedCustomer(ValidatableResponse response, String firstName,
+    public static void checkAllFieldsCorrectCreatedCustomer(Response response, String firstName,
                                                             String lastName, String phoneNumber, String email,
                                                             String dateOfBirth) {
         checkRequiredFieldsCorrectCreatedCustomers(response, firstName, lastName, phoneNumber);
         response
+                .then()
                 .body("email", Matchers.equalTo(email))
                 .body("dateOfBirth", Matchers.equalTo(dateOfBirth))
                 .body("loyalty.bonusCardNumber", Matchers.notNullValue())
@@ -30,29 +32,34 @@ public class CheckAnswers {
                 .body("loyalty.discountRate", Matchers.notNullValue());
     }
 
-    public static void checkFieldCustomer(ValidatableResponse response, String field, String value) {
+    public static void checkFieldCustomer(Response response, String field, String value) {
         response
+                .then()
                 .body(field, Matchers.equalTo(value));
     }
 
-    public static void checkStatusCode(ValidatableResponse response, Integer statusCode) {
+    public static void checkStatusCode(Response response, Integer statusCode) {
         response
+                .then()
                 .statusCode(statusCode);
     }
 
-    public static void checkErrorMessage(ValidatableResponse response, String errors) {
-        if (response.extract().statusCode() == 404) {
+    public static void checkErrorMessage(Response response, String errors) {
+        if (response.statusCode() == 404) {
             response
+                    .then()
                     .body("errors", Matchers.hasItem(errors));
-        } else if (response.extract().statusCode() == 400) {
+        } else if (response.statusCode() == 400) {
             response
+                    .then()
                     .body("error", Matchers.equalTo(errors));
         }
     }
 
-    public static void checkErrorMessage(ValidatableResponse response, String[] errors) {
+    public static void checkErrorMessage(Response response, String[] errors) {
         for (String error : errors) {
             response
+                    .then()
                     .body("errors", Matchers.hasItem(error));
         }
     }

@@ -1,7 +1,7 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Story;
-import io.restassured.response.ValidatableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +20,9 @@ public class GetCustomersFilterTest {
     @Description("Получение клиента по номеру телефона. Создаем клиента, проверяем корректность заполнения " +
             "полей при получении клиента с помощью метода.")
     public void testGetCustomersByPhoneNumber() {
-        ValidatableResponse customer = responsePostCustomers("create-customers");
+        Response customer = responsePostCustomers("create-customers");
         String phoneNumber = getPhoneNumber(customer);
-        ValidatableResponse response = responseGetCustomerByPhoneNumber(phoneNumber);
+        Response response = responseGetCustomerByPhoneNumber(phoneNumber);
 
         checkRequiredFieldsCorrectCreatedCustomers(
                 response,
@@ -38,18 +38,18 @@ public class GetCustomersFilterTest {
             " на длину не установлено, что некорректно. Но в документации длина не указана, за ошибку " +
             "считать нельзя.")
     public void testGetCustomersByPhoneNumberConcat() {
-        ValidatableResponse customer = responsePostCustomers("create-customers");
+        Response customer = responsePostCustomers("create-customers");
         String phoneNumber = getPhoneNumber(customer);
-        ValidatableResponse response = responseGetCustomerByPhoneNumber(phoneNumber);
+        Response response = responseGetCustomerByPhoneNumber(phoneNumber + 123);
 
         checkErrorMessage(response, NOT_FOUND);
     }
 
     @Test
     @DisplayName("Получение клиента по несуществующему номеру телефона")
-    @Description("Пытаемся поулчить клиента по несуществующему номеру телефона. Ожидаем 404")
+    @Description("Пытаемся получить клиента по несуществующему номеру телефона. Ожидаем 404")
     public void testGetCustomersByPhoneNumberInt() {
-        ValidatableResponse response = responseGetCustomerByPhoneNumber("+0000000000");
+        Response response = responseGetCustomerByPhoneNumber("+0000000000");
 
         checkErrorMessage(response, NOT_FOUND);
         checkStatusCode(response, 404);
@@ -59,7 +59,7 @@ public class GetCustomersFilterTest {
     @DisplayName("Получение клиента с передачей спецсимволов вместо номера телефона")
     @Description("Сервис должен возвращать код 400, но вместо этого он пытается найти клиента.")
     public void testGetCustomersByPhoneNumberChar() {
-        ValidatableResponse response = responseGetCustomerByPhoneNumber('&');
+        Response response = responseGetCustomerByPhoneNumber('&');
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, BAD_REQUEST);
