@@ -8,8 +8,6 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.randomNumber;
-
 public class Specifications {
 
     public static RequestSpecBuilder specBuilder() {
@@ -39,11 +37,11 @@ public class Specifications {
                 .build();
     }
 
-    public static <T> RequestSpecification reqSpecPutCustomers(T id, String body) {
+    public static <T> RequestSpecification reqSpecPutCustomers(T id, String body, String phoneNumber) {
         return specBuilder()
                 .setBasePath(ConstantsService.CUSTOMERS_ID + id)
                 .setBody(DataProvider.readJsonAsString(body)
-                        .replace("{phoneNumber}", randomNumber()))
+                        .replace("{phoneNumber}", phoneNumber))
                 .build();
     }
 
@@ -53,10 +51,10 @@ public class Specifications {
                 .build();
     }
 
-    public static RequestSpecification reqSpecPostCustomers(String body) {
+    public static RequestSpecification reqSpecPostCustomers(String body, String phoneNumber) {
         return specBuilder()
                 .setBody(DataProvider.readJsonAsString(body)
-                        .replace("{phoneNumber}", randomNumber()))
+                        .replace("{phoneNumber}", phoneNumber))
                 .setBasePath(ConstantsService.CUSTOMERS)
                 .build();
     }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.kata.config.serviceCustomers.checks.CheckAnswers.*;
 import static com.kata.config.serviceCustomers.constants.ConstantsService.*;
-import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.getPhoneNumber;
+import static com.kata.config.serviceCustomers.preparationDataCustomers.ServiceValues.randomNumber;
 import static com.kata.config.serviceCustomers.preparationResponses.ResponsesApiCustomers.responsePostCustomers;
 
 @Epic(CUSTOMERS)
@@ -19,8 +19,8 @@ public class PostCreateCustomersTest {
     @Description("Создаем клиента только с обязательными для заполнения полями. Проверяем корректность " +
             "полей в ответе.")
     public void testCreateNewCustomersRequiredFields() {
-        Response customer = responsePostCustomers("create-customers");
-        String phoneNumber = getPhoneNumber(customer);
+        String phoneNumber = randomNumber();
+        Response customer = responsePostCustomers("create-customers", phoneNumber);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Petr", "Petrov", phoneNumber);
     }
@@ -30,8 +30,8 @@ public class PostCreateCustomersTest {
     @Description("Создание клиента с русскими именем и фамилией. Проверяем корректность заполнения полей в " +
             "ответе")
     public void testCreatedCustomersCyrillicFirstLastName() {
-        Response customer = responsePostCustomers("create-customers-cyrillic");
-        String phoneNumber = getPhoneNumber(customer);
+        String phoneNumber = randomNumber();
+        Response customer = responsePostCustomers("create-customers-cyrillic", phoneNumber);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "Петр", "Петров", phoneNumber);
     }
@@ -41,8 +41,8 @@ public class PostCreateCustomersTest {
     @Description("Сервис должен игнорировать заполнение полей, которые генерируются на стороне сервиса. Но " +
             "вместо это он отвечает кодом 400")
     public void testCreateNewCustomersAllFields() {
-        Response customer = responsePostCustomers("create-customers-all-fields");
-        String phoneNumber = getPhoneNumber(customer);
+        String phoneNumber = randomNumber();
+        Response customer = responsePostCustomers("create-customers-all-fields", phoneNumber);
 
         checkAllFieldsCorrectCreatedCustomer(
                 customer,
@@ -59,7 +59,8 @@ public class PostCreateCustomersTest {
     @Description("Пытаемся создать клиента без заполнения основных полей. Проверяем сообщения ошибок в " +
             "ответе сервиса, ожидаем 400")
     public void testCreateNewCustomersWithoutRequiredFields() {
-        Response response = responsePostCustomers("create-customers-without-required-fields");
+        String phoneNumber = randomNumber();
+        Response response = responsePostCustomers("create-customers-without-required-fields", phoneNumber);
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, MISSING_FIELDS);
@@ -70,8 +71,8 @@ public class PostCreateCustomersTest {
     @Description("Создаем клиента, вместо имени и фамилии передаем числа. Т.к. в документации на это " +
             "ограничений нет, ожидаем корректное создание клиента.")
     public void testCreateNewCustomersFirstNameNumbers() {
-        Response customer = responsePostCustomers("create-customers-firstLastName-numbers");
-        String phoneNumber = getPhoneNumber(customer);
+        String phoneNumber = randomNumber();
+        Response customer = responsePostCustomers("create-customers-firstLastName-numbers", phoneNumber);
 
         checkRequiredFieldsCorrectCreatedCustomers(customer, "123", "123", phoneNumber);
     }
@@ -80,7 +81,8 @@ public class PostCreateCustomersTest {
     @DisplayName("Создание клиента. В дату рождения передаем данные в формате 0000-00-00")
     @Description("Пытаемся создать клиента с нулевой датой рождения. Ожидаем 400")
     public void testCreateNewCustomersBirthdayZero() {
-        Response response = responsePostCustomers("create-customers-birthday-zero");
+        String phoneNumber = randomNumber();
+        Response response = responsePostCustomers("create-customers-birthday-zero", phoneNumber);
 
         checkStatusCode(response, 400);
         checkErrorMessage(response, BAD_REQUEST);
